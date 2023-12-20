@@ -9,7 +9,7 @@
 *                                                                    *
 **********************************************************************
 
-** emWin V6.34 - Graphical user interface for embedded applications **
+** emWin V6.36 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -199,6 +199,7 @@ int     WM__GetWindowSizeX          (const WM_Obj * pWin);
 int     WM__GetWindowSizeY          (const WM_Obj * pWin);
 void    WM__InsertWindowIntoList    (WM_HWIN hWin, WM_HWIN hParent);
 void    WM__Invalidate1Abs          (WM_HWIN hWin, const GUI_RECT * pRect);
+void    WM__InvalidateDraw          (WM_HWIN hWin);
 void    WM__InvalidateRectEx        (const GUI_RECT * pInvalidRect, WM_HWIN hWin, WM_HWIN hStop);
 int     WM__IsAncestor              (WM_HWIN hChild, WM_HWIN hParent);
 int     WM__IsAncestorOrSelf        (WM_HWIN hChild, WM_HWIN hParent);
@@ -234,9 +235,21 @@ void    WM__RemoveCriticalHandle    (WM_CRITICAL_HANDLE * pCH);
 void    WM__SetLastTouched          (WM_HWIN hWin);
 
 #if WM_SUPPORT_STATIC_MEMDEV
-  void    WM__InvalidateDrawAndDescs(WM_HWIN hWin);
+  void           WM__InvalidateDrawAndDescs(WM_HWIN hWin);
+  void           WM__ClearSMDs             (void);
 #else
   #define WM__InvalidateDrawAndDescs(hWin)
+#endif
+
+/*********************************************************************
+*
+*       Performance measurement
+*/
+#if GUI_SUPPORT_MEMDEV
+
+void WM_FPS__Enable (int xPos, int yPos, GUI_COLOR ColorFG, GUI_COLOR ColorBG);
+void WM_FPS__Disable(void);
+
 #endif
 
 /*********************************************************************

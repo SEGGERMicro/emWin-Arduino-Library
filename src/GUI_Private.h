@@ -9,7 +9,7 @@
 *                                                                    *
 **********************************************************************
 
-** emWin V6.34 - Graphical user interface for embedded applications **
+** emWin V6.36 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -467,6 +467,7 @@ int              GUI_TIMER__IsActive       (void);
 GUI_TIMER_TIME   GUI_TIMER__GetPeriod      (void);
 GUI_TIMER_HANDLE GUI_TIMER__GetFirstTimer  (PTR_ADDR * pContext);
 GUI_TIMER_HANDLE GUI_TIMER__GetNextTimerLin(GUI_TIMER_HANDLE hTimer, PTR_ADDR * pContext);
+int              GUI_TIMER__IsTimer        (GUI_TIMER_HANDLE hObj);
 
 /* Get function pointers for color conversion */
 tLCDDEV_Index2Color * GUI_GetpfIndex2ColorEx(int LayerIndex);
@@ -696,6 +697,7 @@ extern LCD_PIXELINDEX * (* GUI_pfGetpPalConvTable)(const LCD_LOGPALETTE * pLogPa
 //
 // Function pointer for mixing up 2 colors
 //
+extern LCD_COLOR (* LCD__pfMixColors)(LCD_COLOR Color, LCD_COLOR BkColor, U8 Intens);
 extern LCD_COLOR (* GUI__pfMixColors)(LCD_COLOR Color, LCD_COLOR BkColor, U8 Intens);
 
 //

@@ -16,7 +16,7 @@ The AppWizard and the AppWizard manual can be found under these links:
 https://www.segger.com/downloads/emwin/
 https://www.segger.com/doc/UM03003_AppWizard.html
 
-Please make sure to use the correct AppWizard version. This package includes the emWin library V6.34e which matches AppWizard version 1.40f_6.34g.
+Please make sure to use the correct AppWizard version. This package includes the emWin library V6.36 which matches AppWizard version 1.42_6.36.
 
 # Getting started
 To get started with emWin simply include "DIALOG.h" which makes any widget as well as the Window Manager and core functionality of emWin available.

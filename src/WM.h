@@ -9,7 +9,7 @@
 *                                                                    *
 **********************************************************************
 
-** emWin V6.34 - Graphical user interface for embedded applications **
+** emWin V6.36 - Graphical user interface for embedded applications **
 All  Intellectual Property rights  in the Software belongs to  SEGGER.
 emWin is protected by  international copyright laws.  Knowledge of the
 source code may not be used to write a similar product.  This file may
@@ -118,6 +118,14 @@ extern "C" {     /* Make sure we have C-declarations in C++ programs */
 /* Different return value of WM_Exec() and WM_Exec1() */
 #ifndef   WM_EXEC_RET_VAL
   #define WM_EXEC_RET_VAL 0
+#endif
+
+/* Static memory devices */
+#ifndef   WM_SMD_PERIOD
+  #define WM_SMD_PERIOD 3000
+#endif
+#ifndef   WM_SMD_LIMIT
+  #define WM_SMD_LIMIT 60
 #endif
 
 /*********************************************************************
@@ -508,11 +516,9 @@ typedef struct {
                                            // in order to be able to use this flag. If Memory Devices are not enabled, this flag is ignored.
 #define WM_CF_STAYONTOP        (1UL << 3)  // Make sure window stays on top of all siblings created without this flag.
 #define WM_CF_DISABLED         (1UL << 4)  // Window is disabled after creation. This means it receives no PID (mouse and touch) input.
-
-#define WM_CF_ACTIVATE         (1UL << 5)
+#define WM_CF_ACTIVATE         (1UL << 5)  /* Is (re)used as WM_SF_INVALID */
 #define WM_CF_FGND             (0UL << 6)  // Put window in foreground after creation (default).
 #define WM_CF_BGND             (1UL << 6)  // Put window in background after creation.
-
 #define WM_CF_ANCHOR_RIGHT     (1UL << 7)  // Anchors the right edge of the new window relative to the right edge of the parent window. If
                                            // the position of the parent windows right edge will be adjusted due to a size change, the
                                            // position of new window will also be adjusted.
@@ -542,24 +548,20 @@ typedef struct {
                                            // using a Memory Device. The WM will automatically use a Memory Device for redrawing. This flag can
                                            // be used as a replacement of WM_CF_MEMDEV. It typically accelerates the initial rendering of the
                                            // window, but maintains the advantage of flicker free updates.
-#define WM_SF_INVALID_DRAW     (1UL << 14)
-#define WM_SF_DELETE           (1UL << 15)
-
-#define WM_CF_STATIC           (1UL << 16) // Window uses a static memory device for redrawing.
-
+#define WM_SF_INVALID_DRAW     (1UL << 14) /* Tells the WM to redraw the window using the static memory device */
+#define WM_SF_DELETE           (1UL << 15) /* The window will be deleted on the next time WM_Exec() is called */
+#define WM_CF_STATIC           (1UL << 16) // A static memory device is used for drawing. That means if a window with this flag receives a
+                                           // WM_PAINT message, emWin first checks if a static memory device exists. If not, it will be created
+                                           // and the content of the window/widget will be (pre)rendered in the memory device. If such a window
+                                           // is moved to a new position, only the already existing memory needs to be drawn at the new position.
+                                           // This kind of drawing a window could improve the performance a lot, but needs a large amount of RAM.
 #define WM_CF_MOTION_X         (1UL << 17) // Window can be moved automatically in X axis.
 #define WM_CF_MOTION_Y         (1UL << 18) // Window can be moved automatically in Y axis.
-
 #define WM_CF_GESTURE          (1UL << 19) // Marks the window to be able to receive gesture messages. This requires gesture support.
-
 #define WM_CF_ZOOM             (1UL << 20) // Window can be scaled automatically by multi-touch gesture input.
-
 #define WM_CF_MOTION_R         (1UL << 21) // This enables the window to be rotated.
-
 #define WM_CF_UNTOUCHABLE      (1UL << 22) // A window created with this flag routes its touch input to its parent. This makes a window 'untouchable'.
-
-#define WM_CF_APPWIZARD        (1UL << 23) // Window is an AppWizard object
-
+#define WM_CF_APPWIZARD        (1UL << 23) /* Window is an AppWizard object */
 #define WM_CF_MEMDEV_CLIPPING  (1UL << 24) // Reactivates the window manager when drawing into memory devices created via WM_CF_MEMDEV. Otherwise
                                            // it can happen that invisible windows (e.g. a window covered completely by another window) still draws
                                            // its content into a memory device but the memory device doesn't get drawn to the LCD. With this flag
